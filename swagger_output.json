@@ -1,0 +1,180 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Visite RDC API",
+    "description": "Visite RDC est une application web et mobile destiné aux touristes et aux curieux qui aimeraient connaitre la RDC dans biodiversité."
+  },
+  "host": "localhost:8080",
+  "basePath": "/api/v1/",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {   
+    
+    "/sites": {
+      "get": {
+        "tags": ["Sites touristiques"],
+        "summary":"Obtenir tous les sites touristiques enregistrés",
+        "description": "Obtenir tous les sites touristiques enregistrés y compris les agences qui offrent de voyage, les hôtels les plus proches et les images.  ",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },  
+    "/sites/{idProvince}": {
+      "get": {
+        "tags": ["Sites touristiques"],
+        "summary":"Obtenir tous les sites d'une province donnée",
+        "description": "Obtenir tous les sites touristiques se trouvant dans une province donnée(idProvince)",
+        "required": ["idProvince"],
+        "parameters": [
+          {
+            "name": "idProvince",
+            "in": "path",
+            "required": true,
+            "description": "ID de la Province dans laquelle vous voulez obtenir les sites touristiques.",
+            "type": "integer" 
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "La liste des sites touristiques de la province donnée"
+          }
+        }
+      }
+    },      
+    "/sites/most-visited": {
+      "get": {
+        "tags": ["Sites touristiques"],
+        "summary":"Obtenir les cinq sites les plus visités",
+        "description": "Obtenir au plus cinq sites touristiques les plus visités par les utilisateurs",        
+        "responses": {
+          "200": {
+            "description": "La liste d'au plus cinq  sites touristiques les plus visités"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }, 
+    "/sites/visite/{idSite}": {
+      "put": {
+        "tags": ["Sites touristiques"],
+        "summary":"Mettre à jour le nombre de visite sur le Site donné",
+        "description": "Enregistrer la visite de chaque site touristique",
+        "required": ["site"],
+        "parameters": [
+          {
+            "name": "idSite",
+            "in": "path",
+            "required": true,
+            "description": "ID du Site que vous voulez mettre à jour ses informations.",
+            "type": "integer" 
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Le nombre de visite sur le Site tourisqtique est mis à jour"
+          }
+        }
+      }
+    },
+
+    "/provinces": {
+      "get": {
+        "tags": ["Provinces"],
+        "summary": "Obtenir toutes les provinces enregistrées de la RDC.",
+        "description": "Liste des provinces enregistrées avec tous les détails.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Obtenir la liste des provinces de la RDC"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+
+    "/sponsors": {
+      "get": {
+        "tags": ["Sponsors"],
+        "summary": "Obtenir les cinq sponsors pris aléatoirement.",
+        "description": "Liste d'au plus cinq sponsors en cours de validité pris aléatoirement dans la base de données",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Liste d'au plus cinq sponsors "
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+
+    "/animals": {
+      "get": {
+        "tags": ["Animals"],
+        "summary":"Obtenir tous les animaux enregistrés y  compris là où vous pouvez leurs rencontrer.)",
+        "description": "Liste de tous les animaux enregistrés et les sites touristiques où vous pouvez les rencontrer.  ",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },     
+    "/animals/most-visited": {
+      "get": {
+        "tags": ["Animals"],
+        "summary":"Obtenir les cinq animaux les plus visités",
+        "description": "Obtenir au plus cinq animaux les plus visités par les utilisateurs",        
+        "responses": {
+          "200": {
+            "description": "La liste d'au plus cinq  animaux les plus visités"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }, 
+    "/animals/visite/{idAnimal}": {
+      "put": {
+        "tags": ["Animals"],
+        "summary":"Mettre à jour le nombre de visite de l'animal",
+        "description": "Enregistrer la visite de chaque animal",
+        "required": ["idAnimal"],
+        "parameters": [
+          {
+            "name": "idAnimal",
+            "in": "path",
+            "required": true,
+            "description": "ID de l'animal que vous voulez mettre à jour ses informations.",
+            "type": "integer" 
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Le nombre de visite est mis à jour"
+          }
+        }
+      }
+    }
+  }
+}

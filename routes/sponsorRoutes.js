@@ -27,7 +27,7 @@ router.route("/").get(async (req, res) => {
       connection.query(
         `SELECT name, description, CONCAT("${url}",illustration) as illustration,
                 CONCAT("${url}",logo) as logo, p.start_date, p.end_date, p.url FROM abonne AS a, publicite AS p
-                WHERE (a.id = p.abonne_id) AND (DATEDIFF(p.end_date, CURRENT_TIMESTAMP) >= 0) ORDER BY name LIMIT 0,3`,
+                WHERE (a.id = p.abonne_id) AND (DATEDIFF(p.end_date, CURRENT_TIMESTAMP) >= 0) ORDER BY name LIMIT 0,5`,
         (err, rows) => {
           connection.release(); //return the connection to pool
           if (err) throw err;
