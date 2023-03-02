@@ -5,7 +5,7 @@
     "title": "Visite RDC API",
     "description": "Visite RDC est une application web et mobile destiné aux touristes et aux curieux qui aimeraient connaitre la RDC dans biodiversité."
   },
-  "host": "localhost:8080",
+  "host": "localhost:8082",
   "basePath": "/api/v1/",
   "schemes": [
     "http",
@@ -172,6 +172,28 @@
         "responses": {
           "200": {
             "description": "Le nombre de visite est mis à jour"
+          }
+        }
+      }
+    },
+    "/animals/{idProvince}": {
+      "get": {
+        "tags": ["Animals"],
+        "summary":"Obtenir la liste des animaux d'une province donnée",
+        "description": "Liste des animaux d une province passée en paramètre",
+        "required": ["idProvince"],
+        "parameters": [
+          {
+            "name": "idProvince",
+            "in": "path",
+            "required": true,
+            "description": "ID de la province que vous voulez récupérer la liste d'animaux.",
+            "type": "integer" 
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "La liste des animaux de cette province"
           }
         }
       }

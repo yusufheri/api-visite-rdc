@@ -92,6 +92,45 @@ router.route("/visite/:idAnimal(\\d+)").put(async (req, res) => {
   }, 1500);
 });
 
+// GET ANIMALS FOR A PROVINCE
+router.route("/:idProvince(\\d+)").get(async (req, res) => {
+  try {
+    pool.getConnection((error, connection) => {
+      if (error) throw error;
+      const province = mysql.escape(req.params.idProvince);
+
+      connection.query(
+        `SELECT ts.id, ts.name, ts.comment,  CONCAT("${url}",ts.picture) as picture, ts.visited FROM tag_site AS ts, site_tag_site AS sts, site AS s, site_province AS sp 
+          WHERE  (ts.is_animal=1) AND (ts.id = sts.tag_site_id) AND (s.id = sts.site_id) 
+          AND (s.id = sp.site_id) AND (sp.province_id= ${province}) `,
+        (err, animals) => {
+          if (err) throw err;
+
+          let tabId = [];
+          animals.forEach((a, i) => (tabId[i] = a.id));
+
+          connection.query(
+            `SELECT  s.id, s.name, s.description, s.latitude, s.longitude,s.altitude, CONCAT("${url}", s.illustration) AS illustration, sts.tag_site_id as tag,
+              s.phone,s.email, s.website FROM site AS s, site_tag_site AS sts WHERE s.id=sts.site_id`,
+            (err2, sites) => {
+              connection.release(); //return the connection to pool
+              if (err2) throw err2;
+
+              animals.forEach((a) => {
+                a.sites = sites.filter((s) => s.tag == a.id);
+              });
+
+              res.status(200).json({ success: true, data: animals });
+            }
+          );
+        }
+      );
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error });
+  }
+});
+
 function updateSite(params, res) {
   var query =
     `UPDATE tag_site SET visited = (IFNULL(visited, 0) + 1) WHERE tag_site.id = ` +

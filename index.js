@@ -32,7 +32,7 @@ app.use('/api/v1/animals', animalRoutes);
 const startServer = async () => {
     try {
         DBConnection();    
-        app.listen(8080, () => console.log('sever has started on port https://localhost:8080'));    
+        app.listen(8082, () => console.log('sever has started on port https://localhost:8082'));    
     } catch (error) {
         console.error(error);
     }
