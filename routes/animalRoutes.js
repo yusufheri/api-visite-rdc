@@ -94,37 +94,51 @@ router.route("/visite/:idAnimal(\\d+)").put(async (req, res) => {
 
 // GET ANIMALS FOR A PROVINCE
 router.route("/:idProvince(\\d+)").get(async (req, res) => {
+  const province = mysql.escape(req.params.idProvince);
+
+  const q1 = `SELECT ts.id, ts.name, ts.comment,  CONCAT("${url}",ts.picture) as illustration, ts.visited FROM tag_site AS ts, site_tag_site AS sts, site AS s, site_province AS sp WHERE  (ts.is_animal=1) AND (ts.id = sts.tag_site_id) AND (s.id = sts.site_id)  AND (s.id = sp.site_id) AND (sp.province_id= ${province}) `,
+    q2 = `SELECT  s.id, s.name, s.description, s.latitude, s.longitude,s.altitude, CONCAT("${url}", s.illustration) AS illustration, sts.tag_site_id as tag, s.phone,s.email, s.website FROM site AS s, site_tag_site AS sts WHERE s.id=sts.site_id`,
+    q3 = `SELECT s.id as site, h.name, h.description,h.website, h.phone_number, CONCAT("${url}",h.illustration) as illustration FROM site_hotel AS sh, site AS s, hotel AS h WHERE sh.site_id=s.id AND sh.hotel_id=h.id`,
+    q4 = `SELECT s.id AS site,a.name AS agence, o.start_date, o.end_date, o.url FROM site as s, offre as o, offre_site as os, agence as a WHERE s.id=os.site_id AND o.id=os.offre_id AND o.agence_id = a.id`,
+    q5 = `SELECT site_id AS site, CONCAT("${url}",filename) as picture FROM images ORDER BY site_id`;
+
+
   try {
     pool.getConnection((error, connection) => {
       if (error) throw error;
-      const province = mysql.escape(req.params.idProvince);
 
-      connection.query(
-        `SELECT ts.id, ts.name, ts.comment,  CONCAT("${url}",ts.picture) as picture, ts.visited FROM tag_site AS ts, site_tag_site AS sts, site AS s, site_province AS sp 
-          WHERE  (ts.is_animal=1) AND (ts.id = sts.tag_site_id) AND (s.id = sts.site_id) 
-          AND (s.id = sp.site_id) AND (sp.province_id= ${province}) `,
-        (err, animals) => {
-          if (err) throw err;
+      connection.query(q1, (err, animals) => {
+        if (err) throw err;
 
-          let tabId = [];
-          animals.forEach((a, i) => (tabId[i] = a.id));
+        connection.query(q2, (err2, sites) => {
+          if (err2) throw err2;
 
-          connection.query(
-            `SELECT  s.id, s.name, s.description, s.latitude, s.longitude,s.altitude, CONCAT("${url}", s.illustration) AS illustration, sts.tag_site_id as tag,
-              s.phone,s.email, s.website FROM site AS s, site_tag_site AS sts WHERE s.id=sts.site_id`,
-            (err2, sites) => {
-              connection.release(); //return the connection to pool
-              if (err2) throw err2;
+          connection.query(q3, (err3, hotels) => {
+            if (err3) throw err3;
 
-              animals.forEach((a) => {
-                a.sites = sites.filter((s) => s.tag == a.id);
+            connection.query(q4, (err4, offres) => {
+              if (err4) throw err4;
+
+              connection.query(q5, (err5, pictures) => {
+                connection.release(); //return the connection to pool
+                if (err5) throw err5;
+
+                sites.forEach((s) => {
+                  s.pictures = pictures.filter((p) => p.site == s.id);
+                  s.hotels = hotels.filter((h) => h.site == s.id);
+                  s.agences = offres.filter((o) => o.site == s.id);
+                });
+
+                animals.forEach((a) => {
+                  a.sites = sites.filter((s) => s.tag == a.id);
+                });
+
+                res.status(200).json({ success: true, data: animals });
               });
-
-              res.status(200).json({ success: true, data: animals });
-            }
-          );
-        }
-      );
+            });
+          });
+        });
+      });
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error });

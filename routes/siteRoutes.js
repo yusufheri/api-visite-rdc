@@ -30,7 +30,6 @@ router.route("/").get(async (req, res) => {
   try {
     pool.getConnection((error, connection) => {
       if (error) throw error;
-      console.log("connected as id " + connection.threadId);
 
       connection.query(q1, (err, rows) => {
         if (err) throw err;
