@@ -16,7 +16,7 @@
     "/sites": {
       "get": {
         "tags": ["Sites touristiques"],
-        "summary":"Obtenir tous les sites touristiques enregistrés",
+        "summary":"Obtenir tous les sites touristiques enregistrés (order asc)",
         "description": "Obtenir tous les sites touristiques enregistrés y compris les agences qui offrent de voyage, les hôtels les plus proches et les images.  ",
         "parameters": [],
         "responses": {
@@ -109,12 +109,12 @@
     "/sponsors": {
       "get": {
         "tags": ["Sponsors"],
-        "summary": "Obtenir les cinq sponsors pris aléatoirement.",
-        "description": "Liste d'au plus cinq sponsors en cours de validité pris aléatoirement dans la base de données",
+        "summary": "Obtenir la liste des sponsors.",
+        "description": "Liste de sponsors en cours de validité pris aléatoirement dans la base de données",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Liste d'au plus cinq sponsors "
+            "description": "Liste de sponsors "
           },
           "500": {
             "description": "Internal Server Error"

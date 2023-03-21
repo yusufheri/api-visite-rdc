@@ -19,13 +19,13 @@ const url = process.env.downloadImage;
 
 const q2 = `SELECT site_id AS site, CONCAT("${url}",filename) as picture FROM images ORDER BY site_id`,
   q3 = `SELECT s.id as site, h.name, h.description,h.website, h.phone_number, CONCAT("${url}",h.illustration) as illustration FROM site_hotel AS sh, site AS s, hotel AS h WHERE sh.site_id=s.id AND sh.hotel_id=h.id`,
-  q4 = `SELECT s.id AS site,a.name AS agence, o.start_date, o.end_date, o.url FROM site as s, offre as o, offre_site as os, agence as a WHERE s.id=os.site_id AND o.id=os.offre_id AND o.agence_id = a.id`,
+  q4 = `SELECT s.id AS site,a.name AS agence, o.start_date, o.end_date, o.url,a.illustration FROM site as s, offre as o, offre_site as os, agence as a WHERE s.id=os.site_id AND o.id=os.offre_id AND o.agence_id = a.id`,
   q5 = `SELECT s.id AS site, ts.name, ts.comment,  CONCAT("${url}", ts.picture) as illustration
  FROM site AS s, site_tag_site AS sts, tag_site  AS ts WHERE s.id = sts.site_id AND sts.tag_site_id = ts.id AND  ts.is_animal = 1`;
 
 // GET ALL SITES TOURISTIQUES
 router.route("/").get(async (req, res) => {
-  const q1 = `SELECT s.id, s.name,s.visited AS visite,  s.description, s.latitude, s.longitude,s.altitude, CONCAT("${url}", s.illustration) AS illustration,s.phone,s.email, s.website,p.name AS Province  FROM site AS s, site_province as sp, province as p WHERE s.id=sp.site_id  AND sp.province_id=p.id ORDER BY p.id, s.name`;
+  const q1 = `SELECT s.id, s.name,s.visited AS visite,  s.description, s.latitude, s.longitude,s.altitude, CONCAT("${url}", s.illustration) AS illustration,s.phone,s.email, s.website,p.name AS Province  FROM site AS s, site_province as sp, province as p WHERE s.id=sp.site_id  AND sp.province_id=p.id ORDER BY s.name`;
 
   try {
     pool.getConnection((error, connection) => {
