@@ -20,8 +20,9 @@ const url = process.env.downloadImage;
 const q2 = `SELECT site_id AS site, CONCAT("${url}",filename) as picture FROM images ORDER BY site_id`,
   q3 = `SELECT s.id as site, h.name, h.description,h.website, h.phone_number, CONCAT("${url}",h.illustration) as illustration FROM site_hotel AS sh, site AS s, hotel AS h WHERE sh.site_id=s.id AND sh.hotel_id=h.id`,
   q4 = `SELECT s.id AS site,a.name AS agence, o.start_date, o.end_date, o.url,a.illustration FROM site as s, offre as o, offre_site as os, agence as a WHERE s.id=os.site_id AND o.id=os.offre_id AND o.agence_id = a.id`,
-  q5 = `SELECT s.id AS site, ts.name, ts.comment,  CONCAT("${url}", ts.picture) as illustration
- FROM site AS s, site_tag_site AS sts, tag_site  AS ts WHERE s.id = sts.site_id AND sts.tag_site_id = ts.id AND  ts.is_animal = 1`;
+  q5 = `SELECT s.id AS site, ts.name, ts.comment,  CONCAT("${url}", ts.picture) as illustration FROM site AS s, site_tag_site AS sts, tag_site  AS ts WHERE s.id = sts.site_id AND sts.tag_site_id = ts.id AND  ts.is_animal = 1`,
+  q6 = `SELECT s.id AS site, r.name, CONCAT("${url}",r.illustration) as illustration, r.website, r.phone_number, r.description, p.name AS province 
+  FROM restaurant AS r, province AS p, site AS s, restaurant_site as rs WHERE  (p.id = r.province_id) AND (rs.restaurant_id = r.id AND rs.site_id = s.id) `;
 
 // GET ALL SITES TOURISTIQUES
 router.route("/").get(async (req, res) => {
@@ -44,17 +45,22 @@ router.route("/").get(async (req, res) => {
               if (err4) throw err4;
 
               connection.query(q5, (err5, animals) => {
-                connection.release(); //return the connection to pool
                 if (err5) throw err5;
 
-                rows.forEach((s) => {
-                  s.pictures = data.filter((p) => p.site == s.id);
-                  s.hotels = hotels.filter((h) => h.site == s.id);
-                  s.agences = offres.filter((o) => o.site == s.id);
-                  s.animals = animals.filter((a) => a.site == s.id);
-                });
+                connection.query(q6, (err6, restaurants) => {
+                  connection.release(); //return the connection to pool
+                  if (err6) throw err6;
 
-                res.status(200).json({ success: true, data: rows });
+                  rows.forEach((s) => {
+                    s.pictures = data.filter((p) => p.site == s.id);
+                    s.hotels = hotels.filter((h) => h.site == s.id);
+                    s.agences = offres.filter((o) => o.site == s.id);
+                    s.animals = animals.filter((a) => a.site == s.id);
+                    s.restaurants = restaurants.filter((r) => r.site == s.id);
+                  });
+
+                  res.status(200).json({ success: true, data: rows });
+                });
               });
             });
           });

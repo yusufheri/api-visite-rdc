@@ -14,6 +14,7 @@ import provinceRoutes from "./routes/provinceRoutes.js";
 import siteRoutes from "./routes/siteRoutes.js";
 import sponsorRoutes from "./routes/sponsorRoutes.js";
 import animalRoutes from "./routes/animalRoutes.js";
+import restaurantRoutes from "./routes/restaurantsRoutes.js";
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use("/api/v1/provinces", provinceRoutes);
 app.use("/api/v1/sites", siteRoutes);
 app.use("/api/v1/sponsors", sponsorRoutes);
 app.use("/api/v1/animals", animalRoutes);
+app.use("/api/v1/restaurants", restaurantRoutes);
 
 const startServer = async () => {
   try {

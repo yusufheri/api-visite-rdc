@@ -123,6 +123,24 @@
       }
     },
 
+    "/restaurants": {
+      "get": {
+        "tags": ["Restaurants"],
+        "summary": "Obtenir la liste des restaurants.",
+        "description": "Liste de restaurants ",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Liste des restaurants "
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+
+
     "/animals": {
       "get": {
         "tags": ["Animals"],
