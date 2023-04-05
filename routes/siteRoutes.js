@@ -22,7 +22,7 @@ const q2 = `SELECT site_id AS site, CONCAT("${url}",filename) as picture FROM im
   q4 = `SELECT s.id AS site,a.name AS agence, o.start_date, o.end_date, o.url,a.illustration FROM site as s, offre as o, offre_site as os, agence as a WHERE s.id=os.site_id AND o.id=os.offre_id AND o.agence_id = a.id`,
   q5 = `SELECT s.id AS site, ts.name, ts.comment,  CONCAT("${url}", ts.picture) as illustration FROM site AS s, site_tag_site AS sts, tag_site  AS ts WHERE s.id = sts.site_id AND sts.tag_site_id = ts.id AND  ts.is_animal = 1`,
   q6 = `SELECT s.id AS site, r.name, CONCAT("${url}",r.illustration) as illustration, r.website, r.phone_number, r.description, p.name AS province 
-  FROM restaurant AS r, province AS p, site AS s, restaurant_site as rs WHERE  (p.id = r.province_id) AND (rs.restaurant_id = r.id AND rs.site_id = s.id) `;
+  FROM restaurant AS r, province AS p, site AS s, site_restaurant as rs WHERE  (p.id = r.province_id) AND (rs.restaurant_id = r.id AND rs.site_id = s.id) `;
 
 // GET ALL SITES TOURISTIQUES
 router.route("/").get(async (req, res) => {
