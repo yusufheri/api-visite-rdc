@@ -94,17 +94,22 @@ router.route("/most-visited").get(async (req, res) => {
               if (err4) throw err4;
 
               connection.query(q5, (err5, animals) => {
-                connection.release(); //return the connection to pool
                 if (err5) throw err5;
 
-                rows.forEach((s) => {
-                  s.pictures = data.filter((p) => p.site == s.id);
-                  s.hotels = hotels.filter((h) => h.site == s.id);
-                  s.agences = offres.filter((o) => o.site == s.id);
-                  s.animals = animals.filter((a) => a.site == s.id);
-                });
+                connection.query(q6, (err6, restaurants) => {
+                  connection.release(); //return the connection to pool
+                  if (err6) throw err6;
 
-                res.status(200).json({ success: true, data: rows });
+                  rows.forEach((s) => {
+                    s.pictures = data.filter((p) => p.site == s.id);
+                    s.hotels = hotels.filter((h) => h.site == s.id);
+                    s.agences = offres.filter((o) => o.site == s.id);
+                    s.animals = animals.filter((a) => a.site == s.id);
+                    s.restaurants = restaurants.filter((r) => r.site == s.id);
+                  });
+
+                  res.status(200).json({ success: true, data: rows });
+                });
               });
             });
           });
@@ -140,17 +145,22 @@ router.route("/:idProvince(\\d+)").get(async (req, res) => {
               if (err4) throw err4;
 
               connection.query(q5, (err5, animals) => {
-                connection.release(); //return the connection to pool
                 if (err5) throw err5;
 
-                rows.forEach((s) => {
-                  s.pictures = data.filter((p) => p.site == s.id);
-                  s.hotels = hotels.filter((h) => h.site == s.id);
-                  s.agences = offres.filter((o) => o.site == s.id);
-                  s.animals = animals.filter((a) => a.site == s.id);
-                });
+                connection.query(q6, (err6, restaurants) => {
+                  connection.release(); //return the connection to pool
+                  if (err6) throw err6;
 
-                res.status(200).json({ success: true, data: rows });
+                  rows.forEach((s) => {
+                    s.pictures = data.filter((p) => p.site == s.id);
+                    s.hotels = hotels.filter((h) => h.site == s.id);
+                    s.agences = offres.filter((o) => o.site == s.id);
+                    s.animals = animals.filter((a) => a.site == s.id);
+                    s.restaurants = restaurants.filter((r) => r.site == s.id);
+                  });
+
+                  res.status(200).json({ success: true, data: rows });
+                });
               });
             });
           });

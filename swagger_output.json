@@ -89,6 +89,23 @@
       }
     },
 
+    "/questions": {
+      "get": {
+        "tags": ["Questions au choix"],
+        "summary": "Obtenir la liste des questions pour améloirer votre culture générale.",
+        "description": "Liste des questions ",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Liste des questions "
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+
     "/provinces": {
       "get": {
         "tags": ["Provinces"],
