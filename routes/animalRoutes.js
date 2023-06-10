@@ -19,7 +19,7 @@ const url = process.env.downloadImage;
 
 const q2 = `SELECT  s.id, s.name, s.description, s.latitude, s.longitude,s.altitude, CONCAT("${url}", s.illustration) AS illustration, sts.tag_site_id as tag, s.phone,s.email, s.website FROM site AS s, site_tag_site AS sts WHERE s.id=sts.site_id`,
   q3 = `SELECT s.id as site, h.name, h.description,h.website, h.phone_number, CONCAT("${url}",h.illustration) as illustration FROM site_hotel AS sh, site AS s, hotel AS h WHERE sh.site_id=s.id AND sh.hotel_id=h.id`,
-  q4 = `SELECT s.id AS site,a.name AS agence, o.start_date, o.end_date, o.url,a.illustration FROM site as s, offre as o, offre_site as os, agence as a WHERE s.id=os.site_id AND o.id=os.offre_id AND o.agence_id = a.id`,
+  q4 = `SELECT s.id AS site,a.name AS agence,a.website,a.email,a.phone_number, o.start_date, o.end_date, o.url,a.illustration FROM site as s, offre as o, offre_site as os, agence as a WHERE s.id=os.site_id AND o.id=os.offre_id AND o.agence_id = a.id`,
   q5 = `SELECT site_id AS site, CONCAT("${url}",filename) as picture FROM images ORDER BY site_id`,
   q6 = `SELECT s.id AS site, r.name, CONCAT("${url}",r.illustration) as illustration, r.website, r.phone_number, r.description, p.name AS province 
   FROM restaurant AS r, province AS p, site AS s, site_restaurant as rs WHERE  (p.id = r.province_id) AND (rs.restaurant_id = r.id AND rs.site_id = s.id) `;

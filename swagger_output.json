@@ -5,7 +5,7 @@
     "title": "Visite RDC API",
     "description": "Visite RDC est une application web et mobile destiné aux touristes et aux curieux qui aimeraient connaitre la RDC dans biodiversité."
   },
-  "host": "localhost:8080",
+  "host": "localhost:8083",
   "basePath": "/api/v1/",
   "schemes": [
     "http",

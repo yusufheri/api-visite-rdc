@@ -34,8 +34,8 @@ app.use("/api/v1/questions", questionsRoutes);
 const startServer = async () => {
   try {
     DBConnection();
-    app.listen(8080, () =>
-      console.log("sever has started on port https://localhost:8080")
+    app.listen(8083, () =>
+      console.log("sever has started on port https://localhost:8083")
     );
   } catch (error) {
     console.error(error);
